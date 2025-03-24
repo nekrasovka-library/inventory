@@ -1,0 +1,1 @@
+export const ALLOWANCE_GET = "ALLOWANCE_GET";

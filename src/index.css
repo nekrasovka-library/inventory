@@ -1,0 +1,44 @@
+* {
+  font-family: Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #edeee9;
+  color: #222222;
+  min-width: 375px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+textarea {
+  resize: none;
+}
+
+input,
+textarea,
+button {
+  border-radius: 5px;
+}
+
+a,
+button,
+input,
+textarea {
+  font-size: 13px;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: initial;
+}
+
+.root-fixed {
+  position: fixed; width: 100%;
+}
+
