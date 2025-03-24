@@ -1,24 +1,44 @@
 import React from "react";
-import Button from "../../../../nekrasovka-ui/Button";
 import styled from "styled-components";
+import Button from "../../../../nekrasovka-ui/Button";
 
-const FOUND = 4;
-const PENDING = 2;
+const ERROR_STYLES = { color: "rgb(163, 98, 87)" };
+const ERROR_TEXTS = {
+  NOT_FOUND: "Не найдена в ОПАК",
+  MISSING: "Отсутствует в выборке инвентарных номеров",
+};
+
+const getBookRowData = (book) => {
+  const isError = book.status === 6 || book.status === null;
+  const errorText =
+    book.status === 6
+      ? ERROR_TEXTS.NOT_FOUND
+      : book.status === null
+        ? ERROR_TEXTS.MISSING
+        : "";
+
+  const bookClass = book.status === 4 ? "selected" : "";
+  const bookCheck = book.status === 4 ? "V" : "";
+
+  return {
+    isError,
+    bookClass,
+    bookCheck,
+    style: isError ? ERROR_STYLES : {},
+    errorText,
+  };
+};
 
 export default ({ books, setBooks, handleCheckBooks }) => {
   const updateBookStatus = (book, id) => {
     if (book.id !== id) return book;
 
-    if (book.prevStatus === undefined) {
-      book.prevStatus = book.status;
-    }
-
+    book.prevStatus ??= book.status; // Use nullish coalescing for brevity
     book.status = book.status === FOUND ? PENDING : FOUND;
 
     if (book.status === book.prevStatus) {
       delete book.prevStatus;
     }
-
     return book;
   };
 
@@ -41,32 +61,8 @@ export default ({ books, setBooks, handleCheckBooks }) => {
           </thead>
           <tbody>
             {books.map((book, dataIndex) => {
-              let isError = false;
-              let bookClass = "";
-              let bookCheck = "";
-
-              const error = {
-                style: { color: "rgb(163, 98, 87)" },
-                text: "",
-              };
-
-              if (book.status === 4) {
-                bookClass = "selected";
-                bookCheck = "V";
-              }
-
-              if (book.status === 6) {
-                isError = true;
-                error.text = "Не найдена в ОПАК";
-              }
-
-              if (book.status === null) {
-                isError = true;
-                error.text = "Отсутствует в выборке инвентарных номеров";
-              }
-
-              const style = isError ? error.style : {};
-
+              const { isError, bookClass, bookCheck, style, errorText } =
+                getBookRowData(book);
               return (
                 <tr key={dataIndex} style={style}>
                   <td>{book.identificator}</td>
@@ -74,7 +70,7 @@ export default ({ books, setBooks, handleCheckBooks }) => {
                   <td>{book.search_term}</td>
                   <td>
                     {isError ? (
-                      error.text
+                      errorText
                     ) : (
                       <div
                         className={bookClass}
