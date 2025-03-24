@@ -310,8 +310,6 @@ const Inventory = ({
     }
   };
 
-  console.log("❗", books);
-
   const handleBook = async (id, statusNumber) => {
     const url = `${BOOK_API_URL}${id}/status`;
     const method = "patch";
