@@ -6,6 +6,8 @@ export default ({ books, setBooks, handleCheckBooks }) => {
   const toggleBookStatus = (id) => {
     const updatedBooks = books.map((book) => {
       if (book.id === id) {
+        if (!book.prevStatus) book.prevStatus = book.status;
+
         return { ...book, status: book.status === 4 ? 2 : 4 };
       } else return book;
     });

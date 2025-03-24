@@ -75,7 +75,6 @@ const Inventory = ({
 
   const [barcode, setBarcode] = useState("");
   const [books, setBooks] = useState([]);
-  const [initialBooks, setInitialBooks] = useState([]);
   const [verification, setVerification] = useState({
     data: [],
     loaded: false,
@@ -240,7 +239,6 @@ const Inventory = ({
     }
 
     setBooks(updatedBooks);
-    setInitialBooks(updatedBooks);
   };
 
   const handleGetBarcode = async () => {
@@ -289,7 +287,6 @@ const Inventory = ({
 
         setBarcode("");
         setBooks(updatedBooks);
-        setInitialBooks(updatedBooks);
       } else {
         const text = `Книга с меткой ${barcode} отсутствует в выборке инвентарных номеров для инвентаризации`;
 
@@ -397,7 +394,6 @@ const Inventory = ({
 
     setSelectedArchiveId(inventory.id);
     setBooks([]);
-    setInitialBooks([]);
     setInventory(initInventory);
   };
 
@@ -490,14 +486,12 @@ const Inventory = ({
 
   const handleCheckBooks = async () => {
     for (let book of books) {
-      const initBook = initialBooks.find((item) => item.id === book.id);
-      if (initBook.status === book.status) return;
+      if (!book.prevStatus) return;
 
       await handleBook(book.id, book.status);
     }
 
     setBooks([]);
-    setInitialBooks([]);
   };
 
   const handleTypeBarcode = ({ target }) => {
