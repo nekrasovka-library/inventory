@@ -512,9 +512,9 @@ const Inventory = ({
 
   const handleCheckBooks = async () => {
     for (let book of books) {
-      if (!book.prevStatus) return;
-
-      await handleBook(book.id, book.status);
+      if (!!book.prevStatus) {
+        await handleBook(book.id, book.status);
+      }
     }
 
     setBooks([]);
