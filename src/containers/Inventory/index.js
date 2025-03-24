@@ -320,23 +320,23 @@ const Inventory = ({
             name: `${data.title}, ${data.author}`,
           });
         }
+
+        setBarcode("");
+        setBooks(updatedBooks);
       } else {
-        const text = `Книга с меткой ${barcode} отсутствует в выборке инвентарных номеров для инвентаризации`;
+        const text = `Книга с меткой ${barcode} отсутствует в выборке инвентарных номеров для инвентаризации. Добавить в таблицу с отметкой "Отсутствует в выборке инвентарных номеров"?`;
+        const result = confirm(text);
 
-        dispatch({
-          type: "ALERT_ON",
-          name: "error",
-          text,
-        });
+        if (result) {
+          addBookToList(updatedBooks, {
+            search_term: barcode,
+            status: null,
+          });
 
-        addBookToList(updatedBooks, {
-          search_term: barcode,
-          status: null,
-        });
+          setBarcode("");
+          setBooks(updatedBooks);
+        }
       }
-
-      setBarcode("");
-      setBooks(updatedBooks);
     }
   };
 
