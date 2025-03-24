@@ -325,9 +325,9 @@ const Inventory = ({
         setBooks(updatedBooks);
       } else {
         const text = `Книга с меткой ${barcode} отсутствует в выборке инвентарных номеров для инвентаризации. Добавить в таблицу с отметкой "Отсутствует в выборке инвентарных номеров"?`;
-        const result = confirm(text);
+        const isConfirm = confirm(text);
 
-        if (result) {
+        if (isConfirm) {
           addBookToList(updatedBooks, {
             search_term: barcode,
             status: null,
