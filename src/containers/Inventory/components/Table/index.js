@@ -71,7 +71,7 @@ export default ({ books, setBooks, handleCheckBooks }) => {
           <Button
             name="Отметить наличие"
             onClick={handleCheckBooks}
-            buttonStyles={"margin-top: 20px;"}
+            buttonStyles={"margin-top: 40px;"}
           />
         </div>
       )}
@@ -80,6 +80,13 @@ export default ({ books, setBooks, handleCheckBooks }) => {
 };
 
 const Table = styled.div`
+  & > div {
+    :last-child {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
   table {
     font-size: 14px;
     border-collapse: collapse;

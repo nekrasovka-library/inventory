@@ -26,6 +26,24 @@ const BASE_URL = "http://127.0.0.1:21646/rfid";
 const DEVICES_URL = `${BASE_URL}?action=getDevicesList`;
 const BOOK_API_URL = "https://cataloguisation.api.nekrasovka.ru/api/book/";
 
+const statuses = {
+  0: "UNKNOWN",
+  1: "LOADING",
+  2: "PENDING",
+  3: "IN_PROGRESS",
+  4: "FOUND",
+  5: "NOT_FOUND",
+  6: "FAILED_TO_LOAD",
+};
+
+// UNKNOWN: зарезервирован,
+// LOADING: с момента создания до момента заполнения из OPAC
+// PENDING: ожидает работы
+// IN_PROGRESS: промежуточный, для указания о том, что книга в обработке (не используется)
+// FOUND: когда найдена, устанавливает $v с текущей датой в OPAC
+// NOT_FOUND: в теории, этот должен быть установлен всем книгам, которые точно описываются как пропавшие (не используется)
+// FAILED_TO_LOAD: устанавливается после 1, но когда в OPAC книга не находится
+
 const Inventory = ({
   checkTokenExpiredYesUpdate,
   startProgress,
@@ -57,6 +75,7 @@ const Inventory = ({
 
   const [barcode, setBarcode] = useState("");
   const [books, setBooks] = useState([]);
+  const [initialBooks, setInitialBooks] = useState([]);
   const [verification, setVerification] = useState({
     data: [],
     loaded: false,
@@ -221,6 +240,7 @@ const Inventory = ({
     }
 
     setBooks(updatedBooks);
+    setInitialBooks(updatedBooks);
   };
 
   const handleGetBarcode = async () => {
@@ -269,6 +289,7 @@ const Inventory = ({
 
         setBarcode("");
         setBooks(updatedBooks);
+        setInitialBooks(updatedBooks);
       } else {
         const text = `Книга с меткой ${barcode} отсутствует в выборке инвентарных номеров для инвентаризации`;
 
@@ -284,13 +305,7 @@ const Inventory = ({
   const handleBook = async (id, statusNumber) => {
     const url = `${BOOK_API_URL}${id}/status`;
     const method = "patch";
-    let status;
-
-    if (statusNumber === 4) {
-      status = "PENDING";
-    } else {
-      status = "FOUND";
-    }
+    const status = statuses[statusNumber];
 
     await getRequest(url, method, { status });
     await getStatistics(inventory.id);
@@ -382,6 +397,7 @@ const Inventory = ({
 
     setSelectedArchiveId(inventory.id);
     setBooks([]);
+    setInitialBooks([]);
     setInventory(initInventory);
   };
 
@@ -474,12 +490,14 @@ const Inventory = ({
 
   const handleCheckBooks = async () => {
     for (let book of books) {
-      if (book.status === 6) return;
+      const initBook = initialBooks.find((item) => item.id === book.id);
+      if (initBook.status === book.status) return;
 
       await handleBook(book.id, book.status);
     }
 
     setBooks([]);
+    setInitialBooks([]);
   };
 
   const handleTypeBarcode = ({ target }) => {
