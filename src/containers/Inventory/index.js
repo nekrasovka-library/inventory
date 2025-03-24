@@ -138,6 +138,11 @@ const Inventory = ({
       return response;
     } catch (error) {
       console.error("❗getRequest error", error);
+      dispatch({
+        type: "ALERT_ON",
+        name: "error",
+        error,
+      });
     }
   };
 
