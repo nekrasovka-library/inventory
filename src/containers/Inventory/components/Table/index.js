@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../../../../nekrasovka-ui/Button";
 
+const FOUND = 4;
+const PENDING = 2;
+
 const ERROR_STYLES = { color: "rgb(163, 98, 87)" };
 const ERROR_TEXTS = {
   NOT_FOUND: "Не найдена в ОПАК",
