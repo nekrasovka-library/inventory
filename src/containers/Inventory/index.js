@@ -234,6 +234,11 @@ const Inventory = ({
               name: `${data.title}, ${data.author}`,
             });
           }
+        } else {
+          updatedBooks.unshift({
+            search_term: item.id,
+            status: null,
+          });
         }
       }
     }
@@ -284,9 +289,6 @@ const Inventory = ({
             name: `${data.title}, ${data.author}`,
           });
         }
-
-        setBarcode("");
-        setBooks(updatedBooks);
       } else {
         const text = `Книга с меткой ${barcode} отсутствует в выборке инвентарных номеров для инвентаризации`;
 
@@ -295,9 +297,20 @@ const Inventory = ({
           name: "error",
           text,
         });
+
+        updatedBooks.unshift({
+          search_term: barcode,
+          status: null,
+        });
       }
+
+      console.log("❗", updatedBooks);
+      setBarcode("");
+      setBooks(updatedBooks);
     }
   };
+
+  console.log("❗", books);
 
   const handleBook = async (id, statusNumber) => {
     const url = `${BOOK_API_URL}${id}/status`;

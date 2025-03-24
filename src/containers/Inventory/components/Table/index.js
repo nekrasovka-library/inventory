@@ -41,21 +41,31 @@ export default ({ books, setBooks, handleCheckBooks }) => {
           </thead>
           <tbody>
             {books.map((book, dataIndex) => {
-              let dataItemClass = "";
-              let dataItemText = "";
-              let style = {};
+              let isError = false;
+              let bookClass = "";
+              let bookCheck = "";
 
-              const isBookStatusFound = book.status === 4;
-              const isBookStatusFailedToLoad = book.status === 6;
+              const error = {
+                style: { color: "rgb(163, 98, 87)" },
+                text: "",
+              };
 
-              if (isBookStatusFound) {
-                dataItemClass = "selected";
-                dataItemText = "V";
+              if (book.status === 4) {
+                bookClass = "selected";
+                bookCheck = "V";
               }
 
-              if (isBookStatusFailedToLoad) {
-                style = { color: "red" };
+              if (book.status === 6) {
+                isError = true;
+                error.text = "Не найдена в ОПАК";
               }
+
+              if (book.status === null) {
+                isError = true;
+                error.text = "Отсутствует в выборке инвентарных номеров";
+              }
+
+              const style = isError ? error.style : {};
 
               return (
                 <tr key={dataIndex} style={style}>
@@ -63,14 +73,14 @@ export default ({ books, setBooks, handleCheckBooks }) => {
                   <td>{book.name}</td>
                   <td>{book.search_term}</td>
                   <td>
-                    {isBookStatusFailedToLoad ? (
-                      "Не найдена в ОПАК"
+                    {isError ? (
+                      error.text
                     ) : (
                       <div
-                        className={dataItemClass}
+                        className={bookClass}
                         onClick={() => toggleBookStatus(book.id)}
                       >
-                        {dataItemText}
+                        {bookCheck}
                       </div>
                     )}
                   </td>
