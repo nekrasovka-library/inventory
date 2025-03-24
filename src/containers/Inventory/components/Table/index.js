@@ -70,7 +70,7 @@ export default ({ books, handleBook, setBooks, handleCheckBooks }) => {
       {!!books.length && (
         <div>
           <Button
-            name="Очистить список"
+            name="Отметить наличие"
             onClick={handleCheckBooks}
             buttonStyles={"margin-top: 20px;"}
           />

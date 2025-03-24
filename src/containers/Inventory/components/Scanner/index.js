@@ -4,7 +4,7 @@ import styled from "styled-components";
 import ContentModal from "../../../../nekrasovka-ui/ContentModal";
 
 export default ({
-  handleGetBarcodes,
+  handleGetBarcode,
   handleManual,
   handleRFID,
   handleTypeBarcode,
@@ -47,7 +47,7 @@ export default ({
               <Button
                 isDisabled={!barcode}
                 name="Искать"
-                onClick={handleGetBarcodes}
+                onClick={handleGetBarcode}
               />
             </div>
           </HeaderManual>

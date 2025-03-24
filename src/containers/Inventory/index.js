@@ -220,23 +220,10 @@ const Inventory = ({
       }
     }
 
-    const isBooksChanged = updatedBooks.length > books.length;
-
-    if (isBooksChanged) {
-      for (let book of updatedBooks) {
-        const isBookStatusPending = book.status === 2;
-
-        if (isBookStatusPending) {
-          await handleBook(book.id, book.status);
-          book.status = 4;
-        }
-      }
-
-      setBooks(updatedBooks);
-    }
+    setBooks(updatedBooks);
   };
 
-  const handleGetBarcodes = async () => {
+  const handleGetBarcode = async () => {
     const { book, isBook } = foundBook(books, barcode);
     const updatedBooks = [...books];
 
@@ -273,12 +260,6 @@ const Inventory = ({
           const url = `${BOOK_API_URL}search?term=${barcode}&page=1`;
           const response = await getRequest(url);
           const data = response.data.data[0];
-          const isBookStatusPending = data.status === 2;
-
-          if (isBookStatusPending) {
-            await handleBook(data.id, data.status);
-            data.status = 4;
-          }
 
           updatedBooks.unshift({
             ...data,
@@ -491,7 +472,13 @@ const Inventory = ({
     if (isRfidOpen) setIsRfidOpen(false);
   };
 
-  const handleCheckBooks = () => {
+  const handleCheckBooks = async () => {
+    for (let book of books) {
+      if (book.status === 6) return;
+
+      await handleBook(book.id, book.status);
+    }
+
     setBooks([]);
   };
 
@@ -683,7 +670,7 @@ const Inventory = ({
               />
               {type === 1 && (
                 <Scanner
-                  handleGetBarcodes={handleGetBarcodes}
+                  handleGetBarcode={handleGetBarcode}
                   handleManual={handleManual}
                   handleRFID={handleRFID}
                   handleTypeBarcode={handleTypeBarcode}
