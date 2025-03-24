@@ -2,16 +2,28 @@ import React from "react";
 import Button from "../../../../nekrasovka-ui/Button";
 import styled from "styled-components";
 
+const FOUND = 4;
+const PENDING = 2;
+
 export default ({ books, setBooks, handleCheckBooks }) => {
+  const updateBookStatus = (book, id) => {
+    if (book.id !== id) return book;
+
+    if (book.prevStatus === undefined) {
+      book.prevStatus = book.status;
+    }
+
+    book.status = book.status === FOUND ? PENDING : FOUND;
+
+    if (book.status === book.prevStatus) {
+      delete book.prevStatus;
+    }
+
+    return book;
+  };
+
   const toggleBookStatus = (id) => {
-    const updatedBooks = books.map((book) => {
-      if (book.id === id) {
-        if (!book.prevStatus) book.prevStatus = book.status;
-
-        return { ...book, status: book.status === 4 ? 2 : 4 };
-      } else return book;
-    });
-
+    const updatedBooks = books.map((book) => updateBookStatus(book, id));
     setBooks(updatedBooks);
   };
 
