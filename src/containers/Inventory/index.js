@@ -364,7 +364,7 @@ const Inventory = ({
   };
 
   const handleInventory = async () => {
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/new`;
+    const url = `${CATALOGUING_API_URL}/new`;
     const method = "post";
 
     const formData = new FormData();
@@ -376,7 +376,7 @@ const Inventory = ({
   };
 
   const getInventory = async () => {
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/list`;
+    const url = `${CATALOGUING_API_URL}/list`;
     clearProgress();
     startProgress();
 
@@ -424,7 +424,7 @@ const Inventory = ({
   const handleCloseModal = () => setIsModalOpen(false);
 
   const patchCloseInventory = async (params = "") => {
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${inventory.id}/status`;
+    const url = `${CATALOGUING_API_URL}/${inventory.id}/status`;
     const method = "patch";
     const data = { status: "FINISHED", ...params };
 
@@ -447,7 +447,7 @@ const Inventory = ({
     const promptValue = "Введите имя файла без расширения (необязательно)";
     const head = ["Идентификатор", "Описание из АБИС", "Инвентарный номер"];
 
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${id}/books?status=PENDING&limit=100000`;
+    const url = `${CATALOGUING_API_URL}/${id}/books?status=PENDING&limit=100000`;
 
     closeProgress();
     startProgress();
@@ -481,7 +481,7 @@ const Inventory = ({
     const promptValue = "Введите имя файла без расширения (необязательно)";
     const head = ["Инвентарный номер"];
 
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${id}/source`;
+    const url = `${CATALOGUING_API_URL}/${id}/source`;
 
     closeProgress();
     startProgress();
@@ -577,7 +577,7 @@ const Inventory = ({
   };
 
   const getStatistics = async (id) => {
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${id}/stats`;
+    const url = `${CATALOGUING_API_URL}/${id}/stats`;
 
     const response = await getRequest(url);
 
@@ -588,7 +588,7 @@ const Inventory = ({
     clearProgress();
     startProgress();
 
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${id}/stats`;
+    const url = `${CATALOGUING_API_URL}/${id}/stats`;
     const response = await getRequest(url);
 
     const owner = archive.data.find((item) => item.id === id).owner;
@@ -607,7 +607,7 @@ const Inventory = ({
   };
 
   const getArchive = async () => {
-    const url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/list`;
+    const url = `${CATALOGUING_API_URL}/list`;
 
     clearProgress();
     startProgress();
@@ -641,7 +641,7 @@ const Inventory = ({
   };
 
   const handleVerification = async (
-    url = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${inventory.id}/books?status=PENDING&limit=${verification.limit}`,
+    url = `${CATALOGUING_API_URL}/${inventory.id}/books?status=PENDING&limit=${verification.limit}`,
   ) => {
     clearProgress();
     startProgress();
