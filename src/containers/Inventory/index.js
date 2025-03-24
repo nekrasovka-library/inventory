@@ -687,7 +687,6 @@ const Inventory = ({
               {type === 1 && (
                 <Table
                   books={books}
-                  handleBook={handleBook}
                   handleCheckBooks={handleCheckBooks}
                   setBooks={setBooks}
                 />

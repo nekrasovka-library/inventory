@@ -2,8 +2,8 @@ import React from "react";
 import Button from "../../../../nekrasovka-ui/Button";
 import styled from "styled-components";
 
-export default ({ books, handleBook, setBooks, handleCheckBooks }) => {
-  const toggleBookStatus = (id, status) => {
+export default ({ books, setBooks, handleCheckBooks }) => {
+  const toggleBookStatus = (id) => {
     const updatedBooks = books.map((book) => {
       if (book.id === id) {
         return { ...book, status: book.status === 4 ? 2 : 4 };
@@ -11,7 +11,6 @@ export default ({ books, handleBook, setBooks, handleCheckBooks }) => {
     });
 
     setBooks(updatedBooks);
-    handleBook(id, status);
   };
 
   return (
@@ -55,7 +54,7 @@ export default ({ books, handleBook, setBooks, handleCheckBooks }) => {
                     ) : (
                       <div
                         className={dataItemClass}
-                        onClick={() => toggleBookStatus(book.id, book.status)}
+                        onClick={() => toggleBookStatus(book.id)}
                       >
                         {dataItemText}
                       </div>
