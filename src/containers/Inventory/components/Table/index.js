@@ -36,7 +36,7 @@ export default ({ books, setBooks, handleCheckBooks }) => {
   const updateBookStatus = (book, id) => {
     if (book.id !== id) return book;
 
-    book.prevStatus ??= book.status; // Use nullish coalescing for brevity
+    book.prevStatus ??= book.status;
     book.status = book.status === FOUND ? PENDING : FOUND;
 
     if (book.status === book.prevStatus) {
