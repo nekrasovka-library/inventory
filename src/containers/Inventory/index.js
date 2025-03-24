@@ -25,6 +25,8 @@ import ModalCloseInventory from "./components/ModalCloseInventory";
 const BASE_URL = "http://127.0.0.1:21646/rfid";
 const DEVICES_URL = `${BASE_URL}?action=getDevicesList`;
 const BOOK_API_URL = "https://cataloguisation.api.nekrasovka.ru/api/book/";
+const CATALOGUING_API_URL =
+  "https://cataloguisation.api.nekrasovka.ru/api/cataloguing";
 
 const statuses = {
   0: "UNKNOWN",
@@ -43,6 +45,16 @@ const statuses = {
 // FOUND: когда найдена, устанавливает $v с текущей датой в OPAC
 // NOT_FOUND: в теории, этот должен быть установлен всем книгам, которые точно описываются как пропавшие (не используется)
 // FAILED_TO_LOAD: устанавливается после 1, но когда в OPAC книга не находится
+
+async function fetchCataloguingData(inventoryId, term, getRequest) {
+  const url = `${CATALOGUING_API_URL}/${inventoryId}/books?term=${term}`;
+  const response = await getRequest(url);
+  return response.data.data;
+}
+
+function addBookToList(updatedBooks, bookData) {
+  updatedBooks.unshift(bookData);
+}
 
 const Inventory = ({
   checkTokenExpiredYesUpdate,
@@ -214,28 +226,30 @@ const Inventory = ({
       const { isBook } = foundBook(updatedBooks, item.id);
 
       if (!isBook) {
-        const url1 = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${inventory.id}/books?term=${item.id}`;
-        const response1 = await getRequest(url1);
-        const r1Data = response1.data.data;
-        const isR1Data = r1Data.length > 0;
+        const r1Data = await fetchCataloguingData(
+          inventory.id,
+          item.id,
+          getRequest,
+        );
+        const hasBookData = r1Data.length > 0;
 
-        if (isR1Data) {
+        if (hasBookData) {
           const isBookStatusFailedToLoad = r1Data[0].status === 6;
 
           if (isBookStatusFailedToLoad) {
-            updatedBooks.unshift(r1Data[0]);
+            addBookToList(updatedBooks, r1Data[0]);
           } else {
             const url = `${BOOK_API_URL}search?term=${item.id}&page=1`;
             const response = await getRequest(url);
             const data = response.data.data[0];
 
-            updatedBooks.unshift({
+            addBookToList(updatedBooks, {
               ...data,
               name: `${data.title}, ${data.author}`,
             });
           }
         } else {
-          updatedBooks.unshift({
+          addBookToList(updatedBooks, {
             search_term: item.id,
             status: null,
           });
@@ -262,12 +276,14 @@ const Inventory = ({
         text,
       });
     } else {
-      const url1 = `https://cataloguisation.api.nekrasovka.ru/api/cataloguing/${inventory.id}/books?term=${barcode}`;
-      const response1 = await getRequest(url1);
-      const r1Data = response1.data.data;
-      const isR1Data = r1Data.length > 0;
+      const r1Data = await fetchCataloguingData(
+        inventory.id,
+        barcode,
+        getRequest,
+      );
+      const hasBookData = r1Data.length > 0;
 
-      if (isR1Data) {
+      if (hasBookData) {
         const isBookStatusFailedToLoad = r1Data[0].status === 6;
 
         if (isBookStatusFailedToLoad) {
@@ -278,13 +294,13 @@ const Inventory = ({
             text,
           });
 
-          updatedBooks.unshift(r1Data[0]);
+          addBookToList(updatedBooks, r1Data[0]);
         } else {
           const url = `${BOOK_API_URL}search?term=${barcode}&page=1`;
           const response = await getRequest(url);
           const data = response.data.data[0];
 
-          updatedBooks.unshift({
+          addBookToList(updatedBooks, {
             ...data,
             name: `${data.title}, ${data.author}`,
           });
@@ -298,13 +314,12 @@ const Inventory = ({
           text,
         });
 
-        updatedBooks.unshift({
+        addBookToList(updatedBooks, {
           search_term: barcode,
           status: null,
         });
       }
 
-      console.log("❗", updatedBooks);
       setBarcode("");
       setBooks(updatedBooks);
     }
