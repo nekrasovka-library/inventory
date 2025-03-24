@@ -248,6 +248,11 @@ const Inventory = ({
             const response = await getRequest(url);
             const data = response.data.data[0];
 
+            if (data.status !== 4) {
+              data.prevStatus = data.status;
+              data.status = 4;
+            }
+
             addBookToList(updatedBooks, {
               ...data,
               name: `${data.title}, ${data.author}`,
@@ -304,6 +309,11 @@ const Inventory = ({
           const url = `${BOOK_API_URL}search?term=${barcode}&page=1`;
           const response = await getRequest(url);
           const data = response.data.data[0];
+
+          if (data.status !== 4) {
+            data.prevStatus = data.status;
+            data.status = 4;
+          }
 
           addBookToList(updatedBooks, {
             ...data,

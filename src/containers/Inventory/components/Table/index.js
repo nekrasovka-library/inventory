@@ -42,11 +42,13 @@ export default ({ books, setBooks, handleCheckBooks }) => {
     if (book.status === book.prevStatus) {
       delete book.prevStatus;
     }
+
     return book;
   };
 
   const toggleBookStatus = (id) => {
     const updatedBooks = books.map((book) => updateBookStatus(book, id));
+    console.log("❗", updatedBooks);
     setBooks(updatedBooks);
   };
 
