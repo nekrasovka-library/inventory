@@ -19,6 +19,9 @@ export default ({
     getInventoryBase();
   }, []);
 
+  const isDisabled =
+    !inventory.name || !inventory.dbid || !inventory.range.fileName;
+
   return (
     <Container>
       <h4>{formatedToday}</h4>
@@ -103,7 +106,7 @@ export default ({
       </HeaderExclude>
       <Button
         name="Сохранить"
-        isDisabled={!inventory.name || !inventory.dbid}
+        isDisabled={isDisabled}
         onClick={handleInventory}
       />
     </Container>
