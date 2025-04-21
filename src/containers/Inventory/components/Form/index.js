@@ -119,7 +119,6 @@ const Container = styled.div`
   row-gap: 20px;
   max-width: 400px;
   width: 100%;
-  margin: 0 auto;
 
   > div {
     width: 100%;
