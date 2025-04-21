@@ -390,7 +390,7 @@ const Inventory = ({
     const url = `https://cataloguisation.api.nekrasovka.ru/api/system/databases`;
 
     const response = await getRequest(url);
-    // setInventoryBase(transformObjectToArray(response.data.data));
+    setInventoryBase(transformObjectToArray(response.data.data));
   };
 
   const getInventory = async () => {
