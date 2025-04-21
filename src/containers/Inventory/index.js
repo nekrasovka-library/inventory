@@ -75,6 +75,10 @@ const Inventory = ({
     owner: "",
     dbid: "",
   };
+  const initInventoryBase = [
+    { key: "NEKRASOVKA_DEFAULT", label: "Мультибаза" },
+    { key: "NEKRASOVKA_BASE", label: "Основной каталог" },
+  ];
   const initRfid = {
     data: [],
     error: false,
@@ -101,10 +105,7 @@ const Inventory = ({
   const [statistics, setStatistics] = useState(initStatistics);
   const [rfid, setRfid] = useState(initRfid);
   const [inventory, setInventory] = useState(initInventory);
-  const [inventoryBase, setInventoryBase] = useState([
-    { key: "NEKRASOVKA_DEFAULT", label: "Мультибаза" },
-    { key: "NEKRASOVKA_BASE", label: "Основной каталог" },
-  ]);
+  const [inventoryBase, setInventoryBase] = useState(initInventoryBase);
   const [isRfidOpen, setIsRfidOpen] = useState(false);
   const [isManual, setIsManual] = useState(true);
   const [isInitial, setIsInitial] = useState(true);
