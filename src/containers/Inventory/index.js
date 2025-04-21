@@ -462,7 +462,15 @@ const Inventory = ({
 
   const exportPENDING = async ({ id = inventory.id }) => {
     const promptValue = "Введите имя файла без расширения (необязательно)";
-    const head = ["Идентификатор", "Описание из АБИС", "Инвентарный номер"];
+    const head = [
+      "Идентификатор",
+      "Описание из АБИС",
+      "Инвентарный номер",
+      "bbk",
+      "resource",
+      "location",
+      "room",
+    ];
 
     const url = `${CATALOGUING_API_URL}/${id}/books?status=PENDING&limit=100000`;
 
@@ -477,6 +485,10 @@ const Inventory = ({
         [head[0]]: item.identificator,
         [head[1]]: `${item.title}, ${item.author}`,
         [head[2]]: `${item.search_term}`,
+        [head[3]]: `${item.bbk ? item.bbk : ""}`,
+        [head[4]]: `${item.resource ? item.resource : ""}`,
+        [head[5]]: `${item.location ? item.location : ""}`,
+        [head[6]]: `${item.room ? item.room : ""}`,
       };
     });
 
