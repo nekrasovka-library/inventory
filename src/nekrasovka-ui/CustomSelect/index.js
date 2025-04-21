@@ -45,7 +45,6 @@ const CustomSelectButton = styled.div`
   align-items: center;
   border: 1px solid rgb(196, 196, 196);
   padding: 5px 10px;
-  font-size: 13px;
   cursor: pointer;
   user-select: none;
   background-color: white;

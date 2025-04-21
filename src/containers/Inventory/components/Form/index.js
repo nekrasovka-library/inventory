@@ -103,7 +103,7 @@ export default ({
       </HeaderExclude>
       <Button
         name="Сохранить"
-        isDisabled={!inventory.name}
+        isDisabled={!inventory.name || !inventory.dbid}
         onClick={handleInventory}
       />
     </Container>

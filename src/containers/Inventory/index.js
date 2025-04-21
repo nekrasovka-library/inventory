@@ -75,10 +75,7 @@ const Inventory = ({
     owner: "",
     dbid: "",
   };
-  const initInventoryBase = [
-    { key: "NEKRASOVKA_DEFAULT", label: "Мультибаза" },
-    { key: "NEKRASOVKA_BASE", label: "Основной каталог" },
-  ];
+  const initInventoryBase = [];
   const initRfid = {
     data: [],
     error: false,
@@ -376,18 +373,24 @@ const Inventory = ({
     const formData = new FormData();
     formData.append("csvList", inventory.range.fileData);
     formData.append("title", inventory.name);
+    formData.append("dbid", inventory.dbid);
 
     await getRequest(url, method, formData);
     await getInventory();
   };
 
+  const transformObjectToArray = (obj) => {
+    return Object.entries(obj).map(([key, label]) => ({
+      key,
+      label,
+    }));
+  };
+
   const getInventoryBase = async () => {
     const url = `https://cataloguisation.api.nekrasovka.ru/api/system/databases`;
-    const method = "get";
 
-    const response = await getRequest(url, method);
-    console.log("❗getInventoryBase", response);
-    //   setInventoryBase();
+    const response = await getRequest(url);
+    setInventoryBase(transformObjectToArray(response.data.data));
   };
 
   const getInventory = async () => {
@@ -396,7 +399,6 @@ const Inventory = ({
     startProgress();
 
     const response = await getRequest(url);
-
     const temp = response.data.data
       .filter((item) => item.status === 1)
       .map((item) => {
@@ -779,6 +781,8 @@ const Inventory = ({
                 handleRange={handleRange}
                 rangeRef={rangeRef}
                 handleFile={handleFile}
+                getInventoryBase={getInventoryBase}
+                inventoryBase={inventoryBase}
               />
             )
           )}
@@ -802,18 +806,6 @@ const Inventory = ({
               patchCloseInventory={patchCloseInventory}
             />
           )}
-          <Form
-            formatedToday={formatedToday}
-            inventory={inventory}
-            setInventory={setInventory}
-            commentRef={commentRef}
-            handleInventory={handleInventory}
-            handleRange={handleRange}
-            rangeRef={rangeRef}
-            handleFile={handleFile}
-            getInventoryBase={getInventoryBase}
-            inventoryBase={inventoryBase}
-          />
         </>
       )}
     </Container>
