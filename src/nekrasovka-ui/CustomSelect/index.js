@@ -13,7 +13,9 @@ export default ({ options, value, onChange, placeholder }) => {
 
   return (
     <SelectContainer>
-      <CustomSelectButton onClick={() => setIsOpen(!isOpen)}>
+      <CustomSelectButton
+        onClick={() => options.length > 0 && setIsOpen(!isOpen)}
+      >
         {value ? options.find((opt) => opt.key === value)?.label : placeholder}
         <Arrow isOpen={isOpen} />
       </CustomSelectButton>
