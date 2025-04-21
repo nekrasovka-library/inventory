@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../../../../nekrasovka-ui/Button";
 import styled from "styled-components";
+import CustomSelect from "../../../../nekrasovka-ui/CustomSelect";
 
 export default ({
   formatedToday,
@@ -11,10 +12,27 @@ export default ({
   handleRange,
   rangeRef,
   handleFile,
+  getInventoryBase,
+  inventoryBase,
 }) => {
+  useEffect(() => {
+    getInventoryBase();
+  }, []);
+
   return (
     <Container>
       <h4>{formatedToday}</h4>
+      <HeaderExclude>
+        <h4>Выбор целевой базы</h4>
+        <div>
+          <CustomSelect
+            options={inventoryBase}
+            value={inventory.dbid}
+            onChange={(value) => setInventory({ ...inventory, dbid: value })}
+            placeholder="-"
+          />
+        </div>
+      </HeaderExclude>
       <HeaderExclude>
         <h4>Название инвентаризации</h4>
         <div>
@@ -118,7 +136,8 @@ const HeaderExclude = styled.div`
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     padding: 5px 10px;
     font-size: 13px;
     border: 1px solid rgb(196, 196, 196);
@@ -128,7 +147,8 @@ const HeaderExclude = styled.div`
     width: fit-content;
 
     input,
-    textarea {
+    textarea,
+    select {
       min-width: 131px;
       width: 100%;
 
@@ -144,7 +164,8 @@ const HeaderExclude = styled.div`
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
     }
   }

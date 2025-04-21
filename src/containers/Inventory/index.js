@@ -73,6 +73,7 @@ const Inventory = ({
     comment: "",
     loaded: false,
     owner: "",
+    dbid: "",
   };
   const initRfid = {
     data: [],
@@ -100,6 +101,10 @@ const Inventory = ({
   const [statistics, setStatistics] = useState(initStatistics);
   const [rfid, setRfid] = useState(initRfid);
   const [inventory, setInventory] = useState(initInventory);
+  const [inventoryBase, setInventoryBase] = useState([
+    { key: "NEKRASOVKA_DEFAULT", label: "Мультибаза" },
+    { key: "NEKRASOVKA_BASE", label: "Основной каталог" },
+  ]);
   const [isRfidOpen, setIsRfidOpen] = useState(false);
   const [isManual, setIsManual] = useState(true);
   const [isInitial, setIsInitial] = useState(true);
@@ -373,6 +378,15 @@ const Inventory = ({
 
     await getRequest(url, method, formData);
     await getInventory();
+  };
+
+  const getInventoryBase = async () => {
+    const url = `https://cataloguisation.api.nekrasovka.ru/api/system/databases`;
+    const method = "get";
+
+    const response = await getRequest(url, method);
+    console.log("❗getInventoryBase", response);
+    //   setInventoryBase();
   };
 
   const getInventory = async () => {
@@ -787,6 +801,18 @@ const Inventory = ({
               patchCloseInventory={patchCloseInventory}
             />
           )}
+          <Form
+            formatedToday={formatedToday}
+            inventory={inventory}
+            setInventory={setInventory}
+            commentRef={commentRef}
+            handleInventory={handleInventory}
+            handleRange={handleRange}
+            rangeRef={rangeRef}
+            handleFile={handleFile}
+            getInventoryBase={getInventoryBase}
+            inventoryBase={inventoryBase}
+          />
         </>
       )}
     </Container>
